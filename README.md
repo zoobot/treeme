@@ -1,23 +1,33 @@
 # TreeMe
 ## Tree Planting on Public Lands
 
-## How to install dependencies
-sudo npm install webpack -g<br>
-npm install<br>
+### How to install dependencies
+```
+> sudo npm install webpack -g
+> npm install
+```
 
-## Starting MySQL Database
-mysql.server start<br>
+### Starting MySQL Database
+```
+> mysql.server start
+```
 
-## Task Manager, Babelizer, linter
-webpack -w
-mocha testing/lint is commented out right now<br>
+### Task Manager, Babelizer, linter
+mocha testing/lint is commented out right now
+```
+> webpack -w
+```
 
-## To start Server
-node server/server.js<br>
 
-## Tech Stack
+### To start Server
+```
+> node server/server.js<br>
+```
+
+### Tech Stack
 React<br>
 Redux<br>
+Google Maps API<br>
 Node<br>
 Express<br>
 Mysql<br>
