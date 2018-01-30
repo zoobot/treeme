@@ -1,5 +1,10 @@
 import React, {Component} from 'react'
+// import TreeIcon from '../../public/assets/0001_tree-pine.svg'
 
+
+const TreeIcon = 'assets/0001_tree-pine.svg'
+
+const zoomId = {1:10,2:10,3:10,4:10,5:10,6:10,7:10,8:12,9:13,10:15,11:20,12:30,13:40,14:50,15:55,16:60,17:70,18:75,19:120,20:190,21:230,22:340}
 
 const initialized_map = {
   address: 'Alameda, CA',
@@ -10,10 +15,45 @@ const initialized_map = {
   zoom: 17
 };
 
+const tree_markers = [{
+      icon: TreeIcon,
+      position: {
+        latitude: 37.774779,
+        longitude: -122.289542,
+      },
+      label: 'Spruce'
+    },
+    {
+      icon: TreeIcon,
+      position: {
+        latitude: 37.774548,
+        longitude: -122.289653
+      },
+      label: 'Yucca'
+    },
+    {
+      icon: TreeIcon,
+      position: {
+        latitude: 37.774310,
+        longitude: -122.289470
+      },
+      label: 'Maple',
+    },
+    {
+      icon: TreeIcon,
+      position: {
+        latitude: 37.773618,
+        longitude: -122.286868
+      },
+      label: 'Pine',
+    }
+
+  ]
+
 class GoogleMap extends Component {
   state = {
     isGeocodingError: false,
-    foundAddress: initialized_map.address,
+    searchAddress: initialized_map.address,
     latitude: 37.772803,
     longitude: -122.287792,
     zoom: 17
@@ -25,7 +65,7 @@ class GoogleMap extends Component {
       if (status === google.maps.GeocoderStatus.OK) {
 
         this.setState({
-          foundAddress: results[0].formatted_address,
+          searchAddress: results[0].formatted_address,
           isGeocodingError: false
         });
 
@@ -36,7 +76,7 @@ class GoogleMap extends Component {
       }
 
       this.setState({
-        foundAddress: null,
+        searchAddress: null,
         isGeocodingError: true
       });
 
@@ -79,7 +119,30 @@ class GoogleMap extends Component {
       zoom: initialized_map.zoom
     });
 
+    this.tree_markers = tree_markers.map(tree => {
+      // console.log('tree.position', tree.position)
+        new google.maps.Marker({
+          map: this.map,
+          position: {
+            lat: tree.position.latitude,
+            lng: tree.position.longitude
+          },
+          icon: {
+                labelOrigin: new google.maps.Point(35, 70),
+                url: tree.icon,
+                size: new google.maps.Size(100,100),
+                scale: 100,
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(11, 40),
+                scaledSize: new google.maps.Size(100,100)
+          },
+        })
+    })
+
     this.geocoder = new google.maps.Geocoder();
+
+
+
   }
 
   setSearchInputElementReference = (inputReference) => {
@@ -122,7 +185,7 @@ class GoogleMap extends Component {
         <div className="row">
           <div className="col-sm-12">
 
-            {this.state.isGeocodingError ? <p className="bg-danger">Address not found.</p> : <p className="bg-info">{this.state.foundAddress}</p>}
+            {this.state.isGeocodingError ? <p className="bg-danger">Address not on earth.</p> : <p className="bg-info">{this.state.searchAddress}</p>}
 
             <div className="map" ref={this.setMapElementReference}></div>
 

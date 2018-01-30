@@ -1,7 +1,14 @@
 const express = require('express')
 const app = express()
-var router = express.Router()
+const router = express.Router()
 
+const morgan = require('morgan')
+const parser = require('body-parser')
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
+const cors = require('cors')
+const db = require('../db')
+const controller = require('../controllers')
 
 const port = process.env.PORT || 4000
 
@@ -17,6 +24,14 @@ router.route('/login')
 .post((req,res) => {
   console.log('processing')
   res.send('processing the login form')
+})
+.delete((req,res,next) => res.send('Delete'))
+
+router.route('/foo')
+.get((req,res,next) => res.send({user:'food',password:'password'}))
+.post((req,res) => {
+  console.log('foo')
+  res.send('processing the foo')
 })
 .delete((req,res,next) => res.send('Delete'))
 

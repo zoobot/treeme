@@ -20,10 +20,6 @@ module.exports = {
           plugins: ['transform-runtime'],
           presets: ['env', 'react', 'stage-2']
         }
-
-
-
-
       },
       {
         test: /\.css$/,
@@ -35,7 +31,12 @@ module.exports = {
         query: {
           modules: true,
         }
-      }
+      },
+      {
+        test: /\.svg$/,
+        loader: require.resolve('./dangerouslySetInnerHTML.loader'),
+        exclude: /node_modules/,
+      },
     ]
   },
   resolve: {
