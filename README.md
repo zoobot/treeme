@@ -3,25 +3,25 @@
 
 ### How to install dependencies
 ```
-> sudo npm install webpack -g
-> npm install
+sudo npm install webpack -g;
+npm install;
 ```
 
 ### Starting MySQL Database
 ```
-> mysql.server start
+mysql.server start;
 ```
 
 ### Task Manager, Babelizer, linter
 mocha testing/lint is commented out right now
 ```
-> webpack -w
+webpack -w;
 ```
 
 
 ### To start Server
 ```
-> node server/server.js<br>
+node server/server.js;
 ```
 
 ### Tech Stack
