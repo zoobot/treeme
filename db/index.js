@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+// Don't use these credentials in production, obviously
 const db = new Sequelize('socialtree',
   'socialtree', 'socialtree', {
     host: 'localhost',

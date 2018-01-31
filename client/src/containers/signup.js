@@ -1,50 +1,62 @@
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
+import axios from 'axios'
+import { Route, Redirect } from 'react-router'
+
 
 export default class SignUp extends React.Component {
-  constructor(props) {
-    super(props);
+  //keep state
+  state = {
+    firstname: '',
+    lastname: '',
+    username: '',
+    password: '',
+    loggedIn: false
+  };
 
-    //keep state
-    this.state = {
-      firstname: '',
-      lastname: '',
-      username: '',
-      password: ''
-    };
-  }
 
   sendCredentials() {
+    let userUpdate = this.props.updateUser;
     axios.post('/auth/signup', {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
       username: this.state.username,
       password: this.state.password
+    })
+    .then(response => {
+      response.json()
+      userUpdate(response.data);
+      this.setState({ loggedIn: true });
+
+    })
+    .then((data) => {
+      if (data.status == 201 || data.status == 200) {
+        this.props.history.push('/')
+        console.log('Success Login')
+      } else {
+        console.log('Success Not Login')
+      }
+
+
+    })
+    .catch(function(err) {
+      console.error('ERROR', err);
     });
   }
 
+  checkLoggedIn(e) {
+    this.setState({ loggedIn: true });
+  }
   checkFirstname(e) {
-    this.setState({
-      firstname: e.target.value
-    });
+    this.setState({ firstname: e.target.value });
   }
-
   checkLastname(e) {
-    this.setState({
-      lastname: e.target.value
-    });
+    this.setState({ lastname: e.target.value });
   }
-
   checkUsername(e) {
-    this.setState({
-      username: e.target.value
-    });
+    this.setState({ username: e.target.value });
   }
-
   checkPassword(e) {
-    this.setState({
-      password: e.target.value
-    });
+    this.setState({ password: e.target.value });
   }
 
   render() {

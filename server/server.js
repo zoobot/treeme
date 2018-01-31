@@ -18,37 +18,67 @@ router.param('id', (req,res,next,id) => {
   next()
 })
 
-// REST API
-router.route('/login')
-.get((req,res,next) => res.send('This is the login form'))
-.post((req,res) => {
-  console.log('processing')
-  res.send('processing the login form')
-})
-.delete((req,res,next) => res.send('Delete'))
-
-router.route('/foo')
-.get((req,res,next) => res.send({user:'food',password:'password'}))
-.post((req,res) => {
-  console.log('foo')
-  res.send('processing the foo')
-})
-.delete((req,res,next) => res.send('Delete'))
-
-
-app.get('/user/:uid/files/*', function(req, res){
-    var uid = req.params.uid,
-        path = req.params[0] ? req.params[0] : 'index.html';
-    res.sendfile(path, {root: './public'});
-});
-
+app.use(morgan('dev'))
+app.use(parser.json())
+// app.use(express.static(__dirname + '/../client'))
 app.use('/', express.static('client/public'))
-// router.route('/map/:id')
-// .get((req,res,next) => res.send('Get ID ' + req.params.id))
-// .put((req,res,next) => res.send('Put ID ' + req.params.id))
-// .delete((req,res,next) => res.send('Delete ID' + req.params.id))
 
+app.use(require('express-session')({
+  secret: 'treeme_everyday',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    maxAge: 6.048e8
+  }
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
 app.use('/', router)
+
+passport.serializeUser((user,done) => {
+  console.log('SERIALIZER', user)
+  done(null, user.id)
+})
+
+passport.deserializeUser((id, done) => {
+  db.User
+    .find({where: {id: id}})
+    .then(result => done(null, result.dataValues))
+    .catch(err => done(err, null))
+})
+
+passport.use('local-login', new LocalStrategy( {passReqToCallback: true}, (req, username, password, done) => {
+  db.User
+    .find({ where: {username: username}})
+    .then(result => {
+      req.body = {
+        firstname: result.dataValues.firstname,
+        lastname: result.dataValues.lastname
+      }
+      if (!result) return done(null, false)
+      if (!(controller.user.authenticate(password, result.dataValues.password))) return done(null, false)
+      return  done(null, result.dataValues)
+    })
+}))
+
+
+
+//Routes
+router.route('/user')
+  .get(controller.user.get)
+
+router.route('/auth/login')
+  .post(passport.authenticate('local-login'), controller.user.login)
+
+router.route('/auth/signup')
+  .post(controller.user.post)
+
+router.route('/auth/signout')
+  .get(controller.user.logout)
+
+
 
 //index
 app.get('/',(req,res) => res.send('Hello Rose'))
