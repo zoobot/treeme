@@ -6,13 +6,18 @@ var saltRounds = 10;
 module.exports = {
   user: {
     get: (req, res) => {
+      (console.log('in user get',req,res))
       db.User.find({
         where: {
           id: req.query.id
         }
-      }).then(result => res.json(result.firstname + ' ' + result.lastname));
+      }).then(result => {
+        console.log('in user get result',result)
+        res.json(result.firstname + ' ' + result.lastname)
+      })
     },
     authenticate: (attempted, password) => {
+      console.log('authenticate', attempted, password)
       return bcrypt.compareSync(attempted, password);
     },
     post: (req, res) => {

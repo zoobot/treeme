@@ -1,24 +1,31 @@
 import React, {Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Route, Switch } from 'react-router'
+// import ErrorBoundary from '../errorboundary/errorboundary'
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  IndexRoute
-} from 'react-router-dom'
 
-// import { Router, Route, Switch } from 'react-router'
-import Header from './header'
 import Main from './main'
-import Foo from '../containers/foo'
+import Auth from '../containers/auth'
 
-const App = () => (
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Switch>
+          <Route exact path='/' component={Main} />
+          <Route path="/auth/" component={Auth}/>
+          <Route path="/:id" component={Child}/>
+        </Switch>
+      </div>
+
+    )
+  }
+}
+
+const Child = ({ match }) => (
   <div>
-    <Header />
-    <Foo />
-    <Main />
-
+    <h3>ID: {match.params.id}</h3>
   </div>
 )
 

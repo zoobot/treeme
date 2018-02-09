@@ -2,28 +2,34 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux';
-import ReduxPromise from 'redux-promise'
+import { createStore,  applyMiddleware, compose, combineReducers} from 'redux';
+import thunkMiddleware from 'redux-thunk'
 
 import App from './components/app';
-import reducers from './reducers'
+import registerServiceWorker from './registerServiceWorker';
 
-// import GoogleMap from './containers/google_map_test'
-// import registerServiceWorker from './registerServiceWorker';
+import authReducer from './store/reducers/auth';
 
-// import reducers from './reducers';
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+const rootReducer = combineReducers({
+    auth: authReducer
+});
 
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore)
+const store = createStore(rootReducer, composeEnhancers(
+    applyMiddleware(thunkMiddleware)
+));
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+const app = (
+  <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
   </Provider>
-  , document.querySelector('.root'));
-// registerServiceWorker();
+)
+
+ReactDOM.render( app, document.querySelector('.root'));
+registerServiceWorker();
 
 
 

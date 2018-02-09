@@ -50,15 +50,21 @@ passport.deserializeUser((id, done) => {
 })
 
 passport.use('local-login', new LocalStrategy( {passReqToCallback: true}, (req, username, password, done) => {
+  console.log('in local login', username, password)
   db.User
     .find({ where: {username: username}})
     .then(result => {
+      console.log('result',result)
       req.body = {
-        firstname: result.dataValues.firstname,
-        lastname: result.dataValues.lastname
+        // firstname: result.dataValues.firstname,
+        // lastname: result.dataValues.lastname
+        username: result.config.data.username
       }
       if (!result) return done(null, false)
-      if (!(controller.user.authenticate(password, result.dataValues.password))) return done(null, false)
+      if (!(controller.user.authenticate(password, result.dataValues.password))) {
+        console.log('bad auth')
+        return done(null, false)
+      }
       return  done(null, result.dataValues)
     })
 }))
@@ -69,13 +75,14 @@ passport.use('local-login', new LocalStrategy( {passReqToCallback: true}, (req, 
 router.route('/user')
   .get(controller.user.get)
 
+
 router.route('/auth/login')
   .post(passport.authenticate('local-login'), controller.user.login)
 
 router.route('/auth/signup')
   .post(controller.user.post)
 
-router.route('/auth/signout')
+router.route('/auth/logout')
   .get(controller.user.logout)
 
 

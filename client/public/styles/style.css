@@ -3,6 +3,13 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: Arial;
+  background-color: #d9f2e6;
+  /*background-image: "../assets/trees-background.svg";*/
+/*  background: url(../assets/trees-background.png) no-repeat center center fixed;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;*/
 }
 
 .map {
@@ -35,50 +42,38 @@ body {
   padding: 20px;
   font: 100% sans-serif;
 }
-.navbar {
+.nav-container {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  background: #eee;
+  background: #99e699;
   padding: 10px;
   margin: 0 0 0px 0;
   > * {
     margin: 0 0px;
   }
 }
-/*.search {
-  flex: 1;
-  input {
-    width: 100%;
-  }
-}*/
-.navbar-left {
+.nav-left {
     order: 1;
 }
-.navbar-middle {
+.nav-middle {
     order: 2;
 }
-.navbar-right {
+.nav-right {
     order: 3;
 }
 
-
-
-.no-flexbox {
-  .bar {
-    display: table;
-    border-spacing: 15px;
+ul {
+    list-style-type: none;
+    margin: 0;
     padding: 0;
-  }
-  .bar > * {
-    display: table-cell;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-  .username {
-    width: 1px;
-  }
 }
+li {
+  display: inline;
+  padding-right: 20px;
+}
+
+
 
 @media (max-width: 650px) {
   .bar {
